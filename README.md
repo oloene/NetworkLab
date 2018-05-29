@@ -1,1 +1,1 @@
-# NetworkLab in with C++ and QT framework 
+# Network Lab in C++ with QT framework 

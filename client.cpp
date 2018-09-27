@@ -20,3 +20,31 @@ ObjectDesc client::getDesc(){
 char* client::getName(){
     return client::name;
 }
+
+void client::incSeqNum(){
+    client::seqNum++;
+}
+
+unsigned int client::getSeqNum(){
+    return client::seqNum;
+}
+
+void client::setPosX(int newPosX){
+    client::x = newPosX;
+}
+
+int client::getPosX(){
+    return client::y;
+}
+
+void client::setPosY(int newPosY){
+    client::y = newPosY;
+}
+
+int client::getPosY(){
+    return client::y;
+}
+
+unsigned int client::getClientId(){
+    return client::id;
+}

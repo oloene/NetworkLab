@@ -10,7 +10,6 @@ network::network(QHostAddress ipAddr, int portNum)
     network::ip = ipAddr;
     network::port = portNum;
     connect();
-    join();
 }
 
 // thought was to be able to check if connection is succesfull, return true, continue with program etc.
@@ -24,7 +23,6 @@ bool network::connect(){
     }
 }
 
-//TODO: check old style cast
 void network::send(char *msg){
     // use for debug socket->write((char *)&msg);
 
@@ -50,9 +48,9 @@ void network::close(){
 void network::join(client client){
     try {
         JoinMsg msg;
-        msg.desc = client::desc;
+        msg.desc = client.getDesc();
         msg.form = client.getForm();
-        msg.name = client::name;
+        msg.name = client.getName();
 
         MsgHead header = {sizeof (msg), 0, 0, MsgType::Join};
         msg.head = header;

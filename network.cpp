@@ -12,8 +12,7 @@ network::network(QHostAddress ipAddr, int portNum)
     connect();
 }
 
-// thought was to be able to check if connection is succesfull, return true, continue with program etc.
-bool network::connect(){
+void network::connect(){
     network::socket = new QTcpSocket();
     socket->connectToHost(network::ip, network::port);
     if(socket->waitForConnected(network::timeout)){
@@ -50,9 +49,9 @@ void network::join(client client){
         JoinMsg msg;
         msg.desc = client.getDesc();
         msg.form = client.getForm();
-        msg.name = client.getName();
+        strncpy(msg.name, client.getName(), sizeof(client.getName()) - 1);
 
-        MsgHead header = {sizeof (msg), 0, 0, MsgType::Join};
+        MsgHead header = {sizeof (msg),  client.getSeqNum(), client.getClientId(), MsgType::Join};
         msg.head = header;
 
         char *msgChar = reinterpret_cast<char*>(&msg);
@@ -66,7 +65,7 @@ void network::join(client client){
 void network::leave(client client){
     try {
         LeaveMsg msg;
-        MsgHead header = {sizeof (msg), 0, 0, MsgType::Leave};
+        MsgHead header = {sizeof (msg),  client.getSeqNum(), client.getClientId(), MsgType::Leave};
         msg.head = header;
 
         char *msgChar = reinterpret_cast<char*>(&msg);
@@ -80,7 +79,7 @@ void network::leave(client client){
 void network::event(client client){
     try {
         EventMsg msg;
-        MsgHead header = {sizeof (msg), 0, 0, MsgType::Event};
+        MsgHead header = {sizeof (msg),  client.getSeqNum(), client.getClientId(), MsgType::Event};
         msg.head = header;
 
         char *msgChar = reinterpret_cast<char*>(&msg);

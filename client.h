@@ -2,11 +2,14 @@
 #define CLIENT_H
 
 #include <message.h>
+#include <QObject>
 
-class client
+class client : public QObject
 {
+    Q_OBJECT
+
 public:
-    client(std::string name, ObjectForm form, ObjectDesc desc);
+    explicit client(QObject *parent = nullptr, std::string name = "NoName", ObjectForm form = Cube, ObjectDesc desc = Human);
     ObjectForm getForm();
     ObjectDesc getDesc();
     char* getName();
@@ -26,6 +29,11 @@ private:
     unsigned int seqNum = 0;
     int x;
     int y;
+
+signals:
+    void notifyObserver();
+
+public slots:
 };
 
 #endif // CLIENT_H

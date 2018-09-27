@@ -25,19 +25,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     main.cpp \
-    myrect.cpp \
-    socket.cpp \
-    network.cpp \
-    client.cpp \
-    view.cpp
-
+    view.cpp \
+    client.cpp
 
 HEADERS += \
-    message.h \
-    myrect.h \
-    socket.h \
-    network.h \
-    client.h \
-    view.h
+    Message.h \
+    view.h \
+    client.h
 
 FORMS +=

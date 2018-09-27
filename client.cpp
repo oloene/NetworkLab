@@ -2,7 +2,7 @@
 #include <bits/stdc++.h>
 #include <message.h>
 
-client::client(std::string name, ObjectForm form, ObjectDesc desc)
+client::client(QObject *parent, std::string name, ObjectForm form, ObjectDesc desc) : QObject(parent)
 {
     strcpy(client::name, name.c_str()); // implement length check on input, should not be longer than 32 (or maybe 31) chars.
     client::form = form;
@@ -48,3 +48,4 @@ int client::getPosY(){
 unsigned int client::getClientId(){
     return client::id;
 }
+

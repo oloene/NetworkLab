@@ -19,7 +19,7 @@ private:
     int timeout = 4000;     // wait 4 sec for connection
     QTcpSocket *socket;
 
-    bool connect();
+    void connect();
     void send(char *msg);
     void close();
     void join(client client);

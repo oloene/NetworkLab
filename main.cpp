@@ -2,7 +2,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include "myrect.h"
-#include "Socket.h"
+#include "socket.h"
 
 #define SCREEN_WIDTH 480
 #define SCREEN_HEIGHT 480

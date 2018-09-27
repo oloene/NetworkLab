@@ -1,4 +1,4 @@
-#include <Myrect.h>
+#include <myrect.h>
 #include <QDebug>
 #include <QKeyEvent>
 

@@ -1,5 +1,5 @@
-#include "Socket.h"
-#include "Message.h"
+#include "socket.h"
+#include "message.h"
 
 Socket::Socket(QObject *parent) : QObject(parent)
 {
@@ -20,7 +20,7 @@ void Socket::Connect() {
     socket = new QTcpSocket(this);
     //bcast: 130.240.42.63
     //inet: 130.240.40.12
-    socket->connectToHost("130.240.40.12", 49152);
+    socket->connectToHost("130.240.40.7", 49152);
 
     if(socket->waitForConnected(4000)){
         qDebug() << "Connected!";
@@ -35,6 +35,7 @@ void Socket::Connect() {
     }
     else {
         qDebug() << "Connection timed out";
+        qDebug() << socket->error();
     }
 
 }

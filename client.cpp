@@ -49,3 +49,6 @@ unsigned int client::getClientId(){
     return client::id;
 }
 
+void client::handleMsg(){
+
+}

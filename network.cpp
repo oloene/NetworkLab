@@ -3,17 +3,19 @@
 //#include "sys/socket.h"
 #include "qtcpsocket.h"
 #include "client.h"
+#include <QObject>
 
-
-network::network(QHostAddress ipAddr, int portNum)
+network::network(QObject *parent, QHostAddress ipAddr, int portNum)
 {
     network::ip = ipAddr;
     network::port = portNum;
-    connect();
+    network::socket = new QTcpSocket();
+
+    connect(socket, SIGNAL(readyRead()), this, SLOT(readData()));
+    connectSocket();
 }
 
-void network::connect(){
-    network::socket = new QTcpSocket();
+void network::connectSocket(){
     socket->connectToHost(network::ip, network::port);
     if(socket->waitForConnected(network::timeout)){
         qDebug() << "Connected to server.";
@@ -88,4 +90,9 @@ void network::event(client client){
     } catch (QTcpSocket::SocketError e) {
         qDebug() << e;
     }
+}
+
+void network::readData(){
+    socket->bytesAvailable();
+    socket->readAll();
 }

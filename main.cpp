@@ -1,9 +1,10 @@
 #include "client.h"
 #include "view.h"
+#include "network.h"
 #include <QApplication>
 #include <QPushButton>
-#include<QObject>
-
+#include <QObject>
+#include <qhostaddress.h>
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
@@ -11,7 +12,14 @@ int main(int argc, char *argv[]) {
     //create an empty view
     View *_view = new View();
 
+    //TODO: create a client thread to read data from server and update view
+    client *_client = new client(nullptr, "bert", Cube, Human);
+    // _client->start();
+
     //TODO: create a socket connected to the server
+    QHostAddress serverAddr;
+    serverAddr.setAddress("130.240.40.7");
+    network *_network = new network(nullptr, serverAddr, 49152);
     //e.g. Socket *_socket = new Socket();
     // _socket->connect(IP, PORT);
 
@@ -19,9 +27,7 @@ int main(int argc, char *argv[]) {
     //e.g. Player *_player = new Player(_id, _name);
     // _player->start();
 
-    //TODO: create a client thread to read data from server and update view
-    client *_client = new client(nullptr, "bert", Cube, Human);
-    // _client->start();
+
 
     //_view observing _client through SIGNAL and SLOT
     QObject::connect(_client, SIGNAL(notifyObserver()), _view, SLOT(has_changed()) );

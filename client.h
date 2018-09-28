@@ -34,6 +34,7 @@ signals:
     void notifyObserver();
 
 public slots:
+    void handleMsg();
 };
 
 #endif // CLIENT_H

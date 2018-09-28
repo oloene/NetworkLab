@@ -8,10 +8,16 @@
 // forward declaration to not include class.
 class client;
 
-class network
+class network : public QObject
 {
+
+Q_OBJECT
+
+signals:
+    void recvMsg();
+
 public:
-    network(QHostAddress ip, int port);
+    network(QObject *parent = nullptr, QHostAddress ip, int port);
 
 private:
     QHostAddress ip;
@@ -19,12 +25,13 @@ private:
     int timeout = 4000;     // wait 4 sec for connection
     QTcpSocket *socket;
 
-    void connect();
+    void connectSocket();
     void send(char *msg);
     void close();
     void join(client client);
     void leave(client client);
     void event(client client);
+    void readData();
 };
 
 #endif // NETWORK_H

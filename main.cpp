@@ -6,6 +6,7 @@
 #include <QObject>
 #include <qhostaddress.h>
 
+
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
 
@@ -20,6 +21,7 @@ int main(int argc, char *argv[]) {
     QHostAddress serverAddr;
     serverAddr.setAddress("130.240.40.7");
     network *_network = new network(nullptr, serverAddr, 49152);
+    _network->join(_client);
     //e.g. Socket *_socket = new Socket();
     // _socket->connect(IP, PORT);
 
@@ -35,7 +37,11 @@ int main(int argc, char *argv[]) {
     //TODO: implement methods inside client thread to handle server messages
     emit _client->notifyObserver();
 
+
     //display view
     _view->show();
+
+    _network->eventAction(_client);
+
     return a.exec();
 }

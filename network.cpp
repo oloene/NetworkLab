@@ -5,13 +5,15 @@
 #include "client.h"
 #include <QObject>
 
-network::network(QObject *parent, QHostAddress ipAddr, int portNum)
+network::network(QObject *parent, QHostAddress ipAddr, int portNum) : QObject(parent)
 {
     network::ip = ipAddr;
     network::port = portNum;
     network::socket = new QTcpSocket();
 
-    connect(socket, SIGNAL(readyRead()), this, SLOT(readData()));
+    connect(socket, SIGNAL(readyRead()), this, SLOT(readyRead()));
+    //connect(socket, SIGNAL(readyRead()), this, SLOT(readData()));
+    // works connect(socket, SIGNAL(readyRead()), this, SLOT(handleMsg()));
     connectSocket();
 }
 
@@ -29,11 +31,10 @@ void network::send(char *msg){
 
     try {
         socket->write(msg);
-        throw socket->error();
+        //throw socket->error();
     } catch (QTcpSocket::SocketError e) {
         qDebug() << e;
     }
-
 }
 
 void network::close(){
@@ -46,19 +47,20 @@ void network::close(){
 
 }
 
-void network::join(client client){
+void network::join(client *client){
     try {
         JoinMsg msg;
-        msg.desc = client.getDesc();
-        msg.form = client.getForm();
-        strncpy(msg.name, client.getName(), sizeof(client.getName()) - 1);
+        msg.desc = client->getDesc();
+        msg.form = client->getForm();
+        strncpy(msg.name, client->getName(), sizeof(client->getName()) - 1);
 
-        MsgHead header = {sizeof (msg),  client.getSeqNum(), client.getClientId(), MsgType::Join};
+        MsgHead header = {sizeof (msg),  client->getSeqNum(), client->getClientId(), MsgType::Join};
         msg.head = header;
 
         char *msgChar = reinterpret_cast<char*>(&msg);
         send(msgChar);
-        throw socket->error();
+        qDebug() << "join Server";
+        //throw socket->error();
     } catch (QTcpSocket::SocketError e) {
         qDebug() << e;
     }
@@ -78,10 +80,11 @@ void network::leave(client client){
     }
 }
 
-void network::event(client client){
+void network::eventAction(client *client){
     try {
         EventMsg msg;
-        MsgHead header = {sizeof (msg),  client.getSeqNum(), client.getClientId(), MsgType::Event};
+        msg.type = Move;
+        MsgHead header = {sizeof (msg),  client->getSeqNum(), client->getClientId(), MsgType::Event};
         msg.head = header;
 
         char *msgChar = reinterpret_cast<char*>(&msg);
@@ -94,5 +97,16 @@ void network::event(client client){
 
 void network::readData(){
     socket->bytesAvailable();
-    socket->readAll();
+    qDebug() << "in read data";
+    qDebug() << socket->readAll();
+
+}
+
+void network::readyRead(){
+    qDebug() << "in read data";
+    qDebug() << socket->readAll();
+}
+
+void network::handleMsg(){
+    qDebug() << "what";
 }

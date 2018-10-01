@@ -16,8 +16,15 @@ Q_OBJECT
 signals:
     void recvMsg();
 
+private slots:
+    void handleMsg();
+    void readData();
+    void readyRead();
+
 public:
-    network(QObject *parent = nullptr, QHostAddress ip, int port);
+    network(QObject *parent = nullptr, QHostAddress ip = QHostAddress::AnyIPv4, int port = 00000);
+    void join(client *client);
+    void eventAction(client *client);
 
 private:
     QHostAddress ip;
@@ -28,10 +35,8 @@ private:
     void connectSocket();
     void send(char *msg);
     void close();
-    void join(client client);
     void leave(client client);
-    void event(client client);
-    void readData();
+    //void readData();
 };
 
 #endif // NETWORK_H

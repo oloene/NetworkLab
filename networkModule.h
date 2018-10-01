@@ -1,14 +1,15 @@
-#ifndef NETWORK_H
-#define NETWORK_H
+#ifndef NETWORKMODULE_H
+#define NETWORKMODULE_H
 #include <string>
 #include <QTcpSocket>
 #include <QHostAddress>
 #include <message.h>
+#include <QDataStream>
 
 // forward declaration to not include class.
 class client;
 
-class network : public QObject
+class networkModule : public QObject
 {
 
 Q_OBJECT
@@ -18,11 +19,10 @@ signals:
 
 private slots:
     void handleMsg();
-    void readData();
     void readyRead();
 
 public:
-    network(QObject *parent = nullptr, QHostAddress ip = QHostAddress::AnyIPv4, int port = 00000);
+    networkModule(QObject *parent = nullptr, QHostAddress ip = QHostAddress::AnyIPv4, int port = 00000);
     void join(client *client);
     void eventAction(client *client);
 
@@ -31,6 +31,7 @@ private:
     int port;
     int timeout = 4000;     // wait 4 sec for connection
     QTcpSocket *socket;
+    QDataStream in;
 
     void connectSocket();
     void send(char *msg);
@@ -39,4 +40,4 @@ private:
     //void readData();
 };
 
-#endif // NETWORK_H
+#endif // NETWORKMODULE_H

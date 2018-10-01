@@ -25,15 +25,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     main.cpp \
-    network.cpp \
     client.cpp \
-    view.cpp
+    view.cpp \
+    networkModule.cpp
 
 
 HEADERS += \
     message.h \
-    network.h \
     client.h \
-    view.h
+    view.h \
+    networkModule.h
 
 FORMS +=

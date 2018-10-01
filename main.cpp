@@ -1,6 +1,6 @@
 #include "client.h"
 #include "view.h"
-#include "network.h"
+#include "networkModule.h"
 #include <QApplication>
 #include <QPushButton>
 #include <QObject>
@@ -19,8 +19,8 @@ int main(int argc, char *argv[]) {
 
     //TODO: create a socket connected to the server
     QHostAddress serverAddr;
-    serverAddr.setAddress("130.240.40.7");
-    network *_network = new network(nullptr, serverAddr, 49152);
+    serverAddr.setAddress("127.0.0.1");
+    networkModule *_network = new networkModule(nullptr, serverAddr, 5005);
     _network->join(_client);
     //e.g. Socket *_socket = new Socket();
     // _socket->connect(IP, PORT);

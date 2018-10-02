@@ -19,8 +19,9 @@ int main(int argc, char *argv[]) {
 
     //TODO: create a socket connected to the server
     QHostAddress serverAddr;
-    serverAddr.setAddress("127.0.0.1");
-    networkModule *_network = new networkModule(nullptr, serverAddr, 5005);
+    serverAddr.setAddress("130.240.40.7");
+    //serverAddr.setAddress("127.0.0.1")
+    networkModule *_network = new networkModule(nullptr, serverAddr, 49153);
     _network->join(_client);
     //e.g. Socket *_socket = new Socket();
     // _socket->connect(IP, PORT);
@@ -41,7 +42,7 @@ int main(int argc, char *argv[]) {
     //display view
     _view->show();
 
-    _network->eventAction(_client);
+    //network->eventAction(_client);
 
     return a.exec();
 }

@@ -34,7 +34,7 @@ private:
     QDataStream in;
 
     void connectSocket();
-    void send(char *msg);
+    void send(char *msg, int msgSize);
     void close();
     void leave(client client);
     //void readData();

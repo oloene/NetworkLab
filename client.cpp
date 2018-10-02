@@ -1,10 +1,11 @@
 #include "client.h"
 #include <bits/stdc++.h>
 #include <message.h>
+#include <QDebug>
 
-client::client(QObject *parent, std::string name, ObjectForm form, ObjectDesc desc) : QObject(parent)
+client::client(QObject *parent, QString name, ObjectForm form, ObjectDesc desc) : QObject(parent)
 {
-    strcpy(client::name, name.c_str()); // implement length check on input, should not be longer than 32 (or maybe 31) chars.
+    //strcpy(client::name, name.c_str()); // implement length check on input, should not be longer than 32 (or maybe 31) chars.
     client::form = form;
     client::desc = desc;
 }
@@ -52,3 +53,4 @@ unsigned int client::getClientId(){
 void client::handleMsg(){
 
 }
+

@@ -3,13 +3,14 @@
 
 #include <message.h>
 #include <QObject>
+#include <QKeyEvent>
 
 class client : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit client(QObject *parent = nullptr, std::string name = "NoName", ObjectForm form = Cube, ObjectDesc desc = Human);
+    explicit client(QObject *parent = nullptr, QString name = "NoName", ObjectForm form = Cube, ObjectDesc desc = Human);
     ObjectForm getForm();
     ObjectDesc getDesc();
     char* getName();

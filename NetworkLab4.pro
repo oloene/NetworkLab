@@ -26,11 +26,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     main.cpp \
     view.cpp \
-    client.cpp
+    client.cpp \
+    networkModule.cpp \
+    setup.cpp
 
 HEADERS += \
     Message.h \
     view.h \
-    client.h
+    client.h \
+    networkModule.h \
+    setup.h
 
-FORMS +=
+FORMS += \
+    setup.ui

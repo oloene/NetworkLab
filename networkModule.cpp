@@ -112,9 +112,6 @@ void networkModule::readyRead(){
         qDebug() << dataString;
 
         //qDebug() << socket->readAll();
-
-
-
 }
 
 void networkModule::handleMsg(){
@@ -128,9 +125,9 @@ void networkModule::handleMsg(){
 //    }
     //qDebug() << msg;
     qDebug() << socket->bytesAvailable();
-    if(socket->bytesAvailable()<150){
+    /*if(socket->bytesAvailable()<150){
         return;
-    }
+    }*/
 
     //char recvBuffer[512];
     //QByteArray qtBuffer = socket->readAll();
@@ -147,12 +144,12 @@ void networkModule::handleMsg(){
 //    delete decoder;
 
 
-
     MsgHead* msg = (MsgHead *)recvBuffer;
     //QString dataString(recvBuffer);
     qDebug() << msg;
     qDebug() << msg->type;
     if(msg->type == MsgType::Join){
-        qDebug() << "player joined" << msg->id;
+        qDebug() << "player"<< msg->id << "joined";
     }
+
 }

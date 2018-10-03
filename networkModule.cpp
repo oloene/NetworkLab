@@ -130,17 +130,15 @@ void networkModule::handleMsg(){
         qDebug() << "ptr:" << posPtr;
         ChangeMsg *changeMsg;
         JoinMsg *joinMsg;
-        EventMsg *eventMsg;
         LeaveMsg *leaveMsg;
         NewPlayerMsg *newPlayerMsg;
         NewPlayerPositionMsg *newPlayerPosMsg;
         PlayerLeaveMsg *playerLeaveMsg;
 
         switch(msg->type){
-            case MsgType::Event:
-                qDebug() << "eventType";
-                break;
-            case MsgType::Change:
+            case MsgType::Change:            case MsgType::Event:
+            qDebug() << "eventType";
+            break;
                 qDebug() << "changeType";
                 changeMsg = (ChangeMsg *)&recvBuffer[posPtr];
                 qDebug() << "message head:" << changeMsg->head.id;

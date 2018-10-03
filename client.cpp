@@ -50,6 +50,10 @@ unsigned int client::getClientId(){
     return client::id;
 }
 
+void client::setClientId(unsigned int id){
+    client::id = id;
+}
+
 void client::handleMsg(){
 
 }

@@ -27,13 +27,16 @@ SOURCES += \
     main.cpp \
     client.cpp \
     view.cpp \
-    networkModule.cpp
+    networkModule.cpp \
+    setup.cpp
 
 
 HEADERS += \
     message.h \
     client.h \
     view.h \
-    networkModule.h
+    networkModule.h \
+    setup.h
 
-FORMS +=
+FORMS += \
+    setup.ui

@@ -21,6 +21,7 @@ public:
     void setPosY(int newPosY);
     int getPosY();
     unsigned int getClientId();
+    void setClientId(unsigned int id);
 
 private:
     unsigned int id;

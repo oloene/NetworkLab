@@ -4,7 +4,6 @@
 #include <QTcpSocket>
 #include <QHostAddress>
 #include <message.h>
-#include <QDataStream>
 
 // forward declaration to not include class.
 class client;
@@ -31,7 +30,6 @@ private:
     int port;
     int timeout = 4000;     // wait 4 sec for connection
     QTcpSocket *socket;
-    QDataStream in;
 
     void connectSocket();
     void send(char *msg, int msgSize);

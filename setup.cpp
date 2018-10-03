@@ -29,12 +29,13 @@ void Setup::on_buttonBox_clicked()
     QString name = ui->NAME_EDIT->text();
     qDebug() << ip << port << name;
 
-    client *_client = new client(nullptr, name, Cube, Human);
+    client *localClient = new client(nullptr, name, Cube, Human);
 
     QHostAddress serverAddr;
     serverAddr.setAddress(ip);
     networkModule *_network = new networkModule(nullptr, serverAddr, port);
-    _network->join(_client);
+    _network->setLocalClient(localClient);
+    _network->join();
     //e.g. Socket *_socket = new Socket();
     // _socket->connect(IP, PORT);
 
@@ -42,3 +43,8 @@ void Setup::on_buttonBox_clicked()
     View *view = new View();
     view->show();
 }
+
+
+// TODO: design change, implement signal fo on button clicked. this will signal to the main class
+// that the setup is done and can be read, which will start everything sequencially as current impl
+// ementation.

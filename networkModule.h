@@ -22,19 +22,21 @@ private slots:
 
 public:
     networkModule(QObject *parent = nullptr, QHostAddress ip = QHostAddress::AnyIPv4, int port = 00000);
-    void join(client *client);
-    void eventAction(client *client);
+    void join();
+    void setLocalClient(client *localClient);
+    void eventAction();
 
 private:
     QHostAddress ip;
     int port;
     int timeout = 4000;     // wait 4 sec for connection
     QTcpSocket *socket;
+    client *localClient;
 
     void connectSocket();
     void send(char *msg, int msgSize);
     void close();
-    void leave(client client);
+    void leave();
     //void readData();
 };
 

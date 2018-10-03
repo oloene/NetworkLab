@@ -15,3 +15,7 @@ int main(int argc, char *argv[]) {
 
     return a.exec();
 }
+
+
+// TODO: make main "model and controller", in this case, create a contianer of some kind that holds
+// client objects that represent players. so that these can be added to the view canvas.

@@ -20,6 +20,10 @@ networkModule::networkModule(QObject *parent, QHostAddress ipAddr, int portNum) 
     //readyRead();
 }
 
+void networkModule::setLocalClient(client *localClient){
+    networkModule::localClient = localClient;
+}
+
 void networkModule::connectSocket(){
     socket->connectToHost(networkModule::ip, networkModule::port);
     if(socket->waitForConnected(networkModule::timeout)){
@@ -33,8 +37,9 @@ void networkModule::send(char *msg, int msgSize){
     // use for debug socket->write((char *)&msg);
 
     try {
-        qDebug() << "msg contents" << msg;
-        qDebug() << "size of msg:" << sizeof (msg);
+        localClient->incSeqNum();
+        //qDebug() << "msg contents" << msg;
+        //qDebug() << "size of msg:" << sizeof (msg);
         socket->write(msg, msgSize);
         //throw socket->error();
     } catch (QTcpSocket::SocketError e) {
@@ -52,14 +57,14 @@ void networkModule::close(){
 
 }
 
-void networkModule::join(client *client){
+void networkModule::join(){
     try {
         JoinMsg msg;
         MsgHead head = {sizeof (msg), 0, 0, MsgType::Join};
         msg.head = head;
-        msg.desc = client->getDesc();
-        msg.form = client->getForm();
-        strncpy(msg.name, client->getName(), sizeof(client->getName()) - 1);
+        msg.desc = localClient->getDesc();
+        msg.form = localClient->getForm();
+        strncpy(msg.name, localClient->getName(), sizeof(localClient->getName()) - 1);
         //char *msgChar = reinterpret_cast<char*>(&msg);
         int msgSize = sizeof(msg); // check size of the entire message, inorder to be able to send all bytes.
         char *msgBuffer = (char *)&msg;
@@ -72,10 +77,10 @@ void networkModule::join(client *client){
     }
 }
 
-void networkModule::leave(client client){
+void networkModule::leave(){
     try {
         LeaveMsg msg;
-        MsgHead head = {sizeof (msg),  client.getSeqNum(), client.getClientId(), MsgType::Leave};
+        MsgHead head = {sizeof (msg),  localClient->getSeqNum(), localClient->getClientId(), MsgType::Leave};
 
         int msgSize = sizeof(msg); // check size of the entire message, inorder to be able to send all bytes.
         char *msgChar = reinterpret_cast<char*>(&msg);
@@ -86,11 +91,11 @@ void networkModule::leave(client client){
     }
 }
 
-void networkModule::eventAction(client *client){
+void networkModule::eventAction(){
     try {
         EventMsg msg;
         msg.type = Move;
-        MsgHead head = {sizeof (msg),  client->getSeqNum(), client->getClientId(), MsgType::Event};
+        MsgHead head = {sizeof (msg),  localClient->getSeqNum(), localClient->getClientId(), MsgType::Event};
         msg.head = head;
 
         char *msgChar = reinterpret_cast<char*>(&msg);
@@ -143,8 +148,7 @@ void networkModule::handleMsg(){
             case MsgType::Join:
                 qDebug() << "joinType";
                 joinMsg = (JoinMsg *)recvBuffer;
-                client->setClientId() = joinMsg->head.id;
-                TODO: "implement client into this function or other design.";
+                localClient->setClientId(joinMsg->head.id);
                 qDebug() << "id (2):" << joinMsg->head.id;
 
                 break;

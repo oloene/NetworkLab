@@ -156,9 +156,9 @@ void networkModule::handleMsg(){
     char recvBuffer[availNumBytes];
     socket->read(recvBuffer, availNumBytes);
 
-    MsgHead *msg = (MsgHead *)recvBuffer;
-    qDebug() << "id:" << msg->id;
-    qDebug() << "len:" << msg->length;
+    MsgHead *msgHead = (MsgHead *)recvBuffer;
+    qDebug() << "id:" << msgHead->id;
+    qDebug() << "len:" << msgHead->length;
     qDebug() << "size of posPTR" << posPtr;
     qDebug()  << "size of buffer" << sizeof(recvBuffer);
     while(posPtr < sizeof(recvBuffer)){
@@ -169,7 +169,7 @@ void networkModule::handleMsg(){
         NewPlayerPositionMsg *newPlayerPosMsg;
         PlayerLeaveMsg *playerLeaveMsg;
 
-        switch(msg->type){
+        switch(msgHead->type){
             case MsgType::Change:
                 qDebug() << "changeType";
                 changeMsg = (ChangeMsg *)&recvBuffer[posPtr];
@@ -180,19 +180,19 @@ void networkModule::handleMsg(){
                         qDebug() << "new player";
                         newPlayerMsg = (NewPlayerMsg *)&recvBuffer[posPtr];
                         // signal that makes main create a new client with this client id, name etc.
-                        // emit newPlayerSig(newPlayerMsg->head.id, newPlayerMsg->desc, newPlayerMsg->form, newPlayerMsg->name);
+                        emit newPlayerSig(newPlayerMsg->msg.head.id, newPlayerMsg->desc, newPlayerMsg->form, newPlayerMsg->name);
                         break;
                     case NewPlayerPosition:
                         qDebug() << "new position";
                         newPlayerPosMsg = (NewPlayerPositionMsg *)&recvBuffer[posPtr];
                         // main or "model" will get signal that somone got updated pos. searches list of clients and updates accordinly
-                        // emit newPlayerPosSig(newPlayerPosMsg->head.id, newPlayerPosMsg->pos, newPlayerPosMsg->dir);
+                        emit newPosSig(newPlayerPosMsg->msg.head.id, newPlayerPosMsg->pos, newPlayerPosMsg->dir);
                         break;
                     case PlayerLeave:
                         qDebug() << "player left!";
                         playerLeaveMsg = (PlayerLeaveMsg *)&recvBuffer[posPtr];
                         // main or "model" gets signal that someone left the game, search the client list for correct id and pop.
-                        // emit playerLeaveSig(playerLeaveMsg->head.id);
+                        emit playerLeaveSig(playerLeaveMsg->msg.head.id);
                         break;
                 }
                 posPtr += changeMsg->head.length;
@@ -204,12 +204,13 @@ void networkModule::handleMsg(){
                 joinMsg = (JoinMsg *)recvBuffer;
                 localClient->setClientId(joinMsg->head.id);
                 qDebug() << "id (2):" << joinMsg->head.id;
+                emit joinSig(localClient);
                 posPtr += joinMsg->head.length;
                 break;
             default:
                 break;
         }
-        qDebug() << msg->length;
+        qDebug() << msgHead->length;
         //posPtr += msg->length;
     }
 

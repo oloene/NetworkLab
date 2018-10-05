@@ -3,9 +3,10 @@
 
 #include <QGraphicsScene>
 #include <QGraphicsView>
+#include <client.h>
 
-#define SCREEN_HEIGHT 200
-#define SCREEN_WIDTH 200
+#define SCREEN_HEIGHT 1000
+#define SCREEN_WIDTH 1000
 
 class View : public QGraphicsView
 {
@@ -15,12 +16,13 @@ public:
 
 private:
     QGraphicsScene *scene;
-
+    bool isLocalPlayer = true;
 signals:
 
 public slots:
     //view observing the client
     void has_changed();
+    void addClientToScene(client *client);
 
 };
 

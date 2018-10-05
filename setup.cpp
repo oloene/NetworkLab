@@ -7,7 +7,7 @@
 #include "client.h"
 #include "networkModule.h"
 #include <qhostaddress.h>
-#include "keyboardhandler.h"
+#include "message.h"
 
 Setup::Setup(QWidget *parent) :
     QDialog(parent),
@@ -34,22 +34,27 @@ void Setup::on_buttonBox_clicked()
     QHostAddress serverAddr;
     serverAddr.setAddress(ip);
     networkModule *_network = new networkModule(nullptr, serverAddr, port);
+    View *view = new View();
+    connect(_network, SIGNAL(joinSig(client *)), this, SLOT(addClientToScene(client *)));
+    connect(localClient, SIGNAL(moveSig(int)), _network, SLOT(eventAction(int)));
+    connect(_network, SIGNAL(newPosSig(int, Coordinate, Coordinate)), this, SLOT(handleClientPos(int, Coordinate, Coordinate)));
     _network->setLocalClient(localClient);
     _network->join();
-    keyboardHandler keyB;
-    connect(&keyB, SIGNAL(moveSig(int)), _network, SLOT(eventAction(int)));
-    //e.g. Socket *_socket = new Socket();
-    // _socket->connect(IP, PORT);
+
 
     this->hide();
-    View *view = new View();
     view->show();
-
-
-
 }
 
+void Setup::handleClientPos(int id, Coordinate pos, Coordinate dir){
+    //client current = find(clients, );
+    // lookup client by client id number, is same as in clients array
+}
 
+void Setup::addClient(client *client){
+    clients[client->getClientId()] = client;
+    view->addClientToScene(client);
+}
 
 // TODO: design change, implement signal fo on button clicked. this will signal to the main class
 // that the setup is done and can be read, which will start everything sequencially as current impl

@@ -5,7 +5,6 @@
 #include "client.h"
 #include <QObject>
 #include <QTextCodec>
-#include <byteswap.h>
 
 networkModule::networkModule(QObject *parent, QHostAddress ipAddr, int portNum) : QObject(parent)
 {
@@ -41,6 +40,7 @@ void networkModule::send(char *msg, int msgSize){
         //qDebug() << "msg contents" << msg;
         //qDebug() << "size of msg:" << sizeof (msg);
         socket->write(msg, msgSize);
+        //socket->flush();
         //throw socket->error();
     } catch (QTcpSocket::SocketError e) {
         qDebug() << e;
@@ -180,13 +180,15 @@ void networkModule::handleMsg(){
                         qDebug() << "new player";
                         newPlayerMsg = (NewPlayerMsg *)&recvBuffer[posPtr];
                         // signal that makes main create a new client with this client id, name etc.
-                        // emit newPlayerSig(newPlayerMsg->head.id, newPlayerMsg->desc, newPlayerMsg->form, newPlayerMsg->name);
+                        emit newPlayerSig(newPlayerMsg->msg.head.id, newPlayerMsg->name);
                         break;
                     case NewPlayerPosition:
                         qDebug() << "new position";
                         newPlayerPosMsg = (NewPlayerPositionMsg *)&recvBuffer[posPtr];
                         // main or "model" will get signal that somone got updated pos. searches list of clients and updates accordinly
-                        // emit newPlayerPosSig(newPlayerPosMsg->head.id, newPlayerPosMsg->pos, newPlayerPosMsg->dir);
+                        emit newPosSig(newPlayerPosMsg->msg.head.id,
+                                             newPlayerPosMsg->pos,
+                                             newPlayerPosMsg->dir);
                         break;
                     case PlayerLeave:
                         qDebug() << "player left!";

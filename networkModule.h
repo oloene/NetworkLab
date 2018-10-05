@@ -4,6 +4,7 @@
 #include <QTcpSocket>
 #include <QHostAddress>
 #include <message.h>
+#include <message.h>
 
 // forward declaration to not include class.
 class client;
@@ -14,6 +15,8 @@ class networkModule : public QObject
 Q_OBJECT
 
 signals:
+    void newPlayerSig(int id, char name[]); //emit signal when new player joins
+    void newPosSig(int id, Coordinate pos, Coordinate dir);
     void recvMsg();
 
 private slots:

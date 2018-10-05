@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QAbstractButton>
+#include "message.h"
 
 namespace Ui {
 class Setup;
@@ -18,9 +19,11 @@ public:
 
 signals:
     //QString ip, int port, QString name
-    void setupDone();
+    void setupDone(QString ip, int port, QString name);
 
 private slots:
+    void newPlayerSlot(int id, char name[]);
+    void newPosSlot(int id, Coordinate pos, Coordinate dir);
     void on_buttonBox_clicked();
 
 private:

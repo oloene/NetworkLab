@@ -34,6 +34,11 @@ void Setup::on_buttonBox_clicked()
     QHostAddress serverAddr;
     serverAddr.setAddress(ip);
     networkModule *_network = new networkModule(nullptr, serverAddr, port);
+
+    //connect network module signal to setup slot
+    connect(_network, SIGNAL(newPlayerSig(int, char[])), this, SLOT(newPlayerSlot(int, char[])));
+    connect(_network, SIGNAL(newPosSig(int,Coordinate,Coordinate)), this, SLOT(newPosSlot(int,Coordinate,Coordinate)));
+
     _network->setLocalClient(localClient);
     _network->join();
     keyboardHandler keyB;
@@ -44,14 +49,18 @@ void Setup::on_buttonBox_clicked()
     this->hide();
     View *view = new View();
     view->show();
-
-
-
 }
-
-
 
 // TODO: design change, implement signal fo on button clicked. this will signal to the main class
 // that the setup is done and can be read, which will start everything sequencially as current impl
 // ementation.
 // emit setupDone(ip, port, name);
+void Setup::newPlayerSlot(int id, char name[]){
+    qDebug() << "player" << id << "joined";
+}
+
+//REMEMBER TO ADD +100 TO POS.X AND POS.Y
+void Setup::newPosSlot(int id, Coordinate pos, Coordinate dir){
+    qDebug() << "setup receives new position from player" << id;
+    qDebug() << "moving to (x,y):"<<pos.x << pos.y;
+}

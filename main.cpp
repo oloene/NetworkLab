@@ -11,6 +11,7 @@ int main(int argc, char *argv[]) {
 
     //setup window
     Setup *stp = new Setup();
+    //QObject::connect(stp, SIGNAL(setupDone()),SLOT(gameStart));
     stp->show();
 
     return a.exec();

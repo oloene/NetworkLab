@@ -28,7 +28,8 @@ SOURCES += \
     client.cpp \
     view.cpp \
     networkModule.cpp \
-    setup.cpp
+    setup.cpp \
+    keyboardhandler.cpp
 
 
 HEADERS += \
@@ -36,7 +37,8 @@ HEADERS += \
     client.h \
     view.h \
     networkModule.h \
-    setup.h
+    setup.h \
+    keyboardhandler.h
 
 FORMS += \
     setup.ui

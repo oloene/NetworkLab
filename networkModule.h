@@ -19,12 +19,12 @@ signals:
 private slots:
     void handleMsg();
     void readyRead();
+    void eventAction(int direction);
 
 public:
     networkModule(QObject *parent = nullptr, QHostAddress ip = QHostAddress::AnyIPv4, int port = 00000);
     void join();
     void setLocalClient(client *localClient);
-    void eventAction();
 
 private:
     QHostAddress ip;

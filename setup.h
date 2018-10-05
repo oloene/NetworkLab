@@ -16,6 +16,10 @@ public:
     explicit Setup(QWidget *parent = 0);
     ~Setup();
 
+signals:
+    //QString ip, int port, QString name
+    void setupDone();
+
 private slots:
     void on_buttonBox_clicked();
 

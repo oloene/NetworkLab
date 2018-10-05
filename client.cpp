@@ -31,19 +31,44 @@ unsigned int client::getSeqNum(){
 }
 
 void client::setPosX(int newPosX){
-    client::x = newPosX;
+    client::pos.x = newPosX;
 }
 
 int client::getPosX(){
-    return client::y;
+    return client::pos.x;
 }
 
 void client::setPosY(int newPosY){
-    client::y = newPosY;
+    client::pos.y = newPosY;
 }
 
 int client::getPosY(){
-    return client::y;
+    return client::pos.y;
+}
+
+
+void client::setDirX(int newDirX){
+    client::dir.x = newDirX;
+}
+
+int client::getDirX(){
+    return client::dir.x;
+}
+
+void client::setDirY(int newDirY){
+    client::dir.y = newDirY;
+}
+
+int client::getDirY(){
+    return client::dir.y;
+}
+
+Coordinate client::getDir(){
+    return client::dir;
+}
+
+Coordinate client::getPos(){
+    return client::pos;
 }
 
 unsigned int client::getClientId(){

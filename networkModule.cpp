@@ -77,6 +77,7 @@ void networkModule::join(){
     }
 }
 
+// Leave msg only contains a head which is correct according to spec.
 void networkModule::leave(){
     try {
         LeaveMsg msg;
@@ -91,16 +92,50 @@ void networkModule::leave(){
     }
 }
 
-void networkModule::eventAction(){
+void networkModule::eventAction(int direction){
     try {
+        MoveEvent moveEventMsg;
+        MsgHead head = {sizeof (moveEventMsg),  localClient->getSeqNum(), localClient->getClientId(), MsgType::Event};
         EventMsg msg;
-        msg.type = Move;
-        MsgHead head = {sizeof (msg),  localClient->getSeqNum(), localClient->getClientId(), MsgType::Event};
         msg.head = head;
+        msg.type = Move;
 
+        moveEventMsg.event = msg;
+        moveEventMsg.dir = localClient->getDir();
+        Coordinate newPos;
+        switch (direction) {
+            // 0 will be RIGHT
+            case 0:
+                qDebug() << "eventAction got right";
+                newPos = localClient->getPos();
+                newPos.x++;
+                break;
+            // 1 will be LEFT
+            case 1:
+                qDebug() << "eventAction got left";
+                newPos = localClient->getPos();
+                newPos.x--;
+                break;
+            // 2 will be UP
+            case 2:
+                qDebug() << "eventAction got up";
+                newPos = localClient->getPos();
+                newPos.y--;
+                break;
+            // 3 will be DOWN
+            case 3:
+                qDebug() << "eventAction got down";
+                newPos = localClient->getPos();
+                newPos.y++;
+                break;
+
+        }
+        moveEventMsg.pos = newPos;
+
+        int msgSize = sizeof(moveEventMsg); // check size of the entire message, inorder to be able to send all bytes.
         char *msgChar = reinterpret_cast<char*>(&msg);
-        send(msgChar, 8);
-        throw socket->error();;
+        send(msgChar, msgSize);
+        //throw socket->error();;
     } catch (QTcpSocket::SocketError e) {
         qDebug() << e;
     }
@@ -130,15 +165,12 @@ void networkModule::handleMsg(){
         qDebug() << "ptr:" << posPtr;
         ChangeMsg *changeMsg;
         JoinMsg *joinMsg;
-        LeaveMsg *leaveMsg;
         NewPlayerMsg *newPlayerMsg;
         NewPlayerPositionMsg *newPlayerPosMsg;
         PlayerLeaveMsg *playerLeaveMsg;
 
         switch(msg->type){
-            case MsgType::Change:            case MsgType::Event:
-            qDebug() << "eventType";
-            break;
+            case MsgType::Change:
                 qDebug() << "changeType";
                 changeMsg = (ChangeMsg *)&recvBuffer[posPtr];
                 qDebug() << "message head:" << changeMsg->head.id;
@@ -174,9 +206,6 @@ void networkModule::handleMsg(){
                 qDebug() << "id (2):" << joinMsg->head.id;
                 posPtr += joinMsg->head.length;
                 break;
-            case MsgType::Leave:
-                qDebug() << "leaveType";
-            break;
             default:
                 break;
         }

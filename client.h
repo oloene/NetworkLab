@@ -20,6 +20,12 @@ public:
     int getPosX();
     void setPosY(int newPosY);
     int getPosY();
+    void setDirX(int newDirX);
+    int getDirX();
+    void setDirY(int newDirY);
+    int getDirY();
+    Coordinate getDir();
+    Coordinate getPos();
     unsigned int getClientId();
     void setClientId(unsigned int id);
 
@@ -29,8 +35,8 @@ private:
     ObjectDesc desc;
     char name[MAXNAMELEN];
     unsigned int seqNum = 0;
-    int x;
-    int y;
+    Coordinate pos;
+    Coordinate dir;
 
 signals:
     void notifyObserver();

@@ -15,9 +15,9 @@ Q_OBJECT
 
 signals:
     void joinSig(client *client);
-    void newPosSig(int id, Coordinate pos, Coordinate dir);
-    void newPlayerSig(int id, ObjectDesc desc, ObjectForm form, char name[]);
-    void playerLeaveSig(int id);
+    void newPosSig(uint id, Coordinate pos, Coordinate dir);
+    void newPlayerSig(uint id);
+    void playerLeaveSig(uint id);
 
 private slots:
     void handleMsg();

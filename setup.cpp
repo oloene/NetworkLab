@@ -18,7 +18,7 @@ Setup::Setup(QWidget *parent) :
 
 Setup::~Setup()
 {
-    delete ui;
+    //delete ui;
 }
 
 //OK button clicked
@@ -29,32 +29,50 @@ void Setup::on_buttonBox_clicked()
     int port = ui->PORT_EDIT->text().toInt();
     QString name = ui->NAME_EDIT->text();
     qDebug() << ip << port << name;
-    client *localClient = new client(nullptr, name, Cube, Human);
+    client *localClient = new client(Cube, Human);
 
     QHostAddress serverAddr;
     serverAddr.setAddress(ip);
     networkModule *_network = new networkModule(nullptr, serverAddr, port);
     View *view = new View();
-    connect(_network, SIGNAL(joinSig(client *)), this, SLOT(addClientToScene(client *)));
-    connect(localClient, SIGNAL(moveSig(int)), _network, SLOT(eventAction(int)));
-    connect(_network, SIGNAL(newPosSig(int, Coordinate, Coordinate)), this, SLOT(handleClientPos(int, Coordinate, Coordinate)));
+    //connect(_network, SIGNAL(joinSig(client *)), this, SLOT(addClient(client *))); // special case for localplayer ?
+    //connect(localClient, SIGNAL(moveSig(int)), _network, SLOT(eventAction(int)));   // keyboard signal generates event to send
+    connect(_network, SIGNAL(newPosSig(uint, Coordinate, Coordinate)), this, SLOT(newPos(uint, Coordinate, Coordinate)));
+    connect(_network, SIGNAL(newPlayerSig(uint)), this, SLOT(newPlayer(uint)));
+
     _network->setLocalClient(localClient);
     _network->join();
-
 
     this->hide();
     view->show();
 }
 
-void Setup::handleClientPos(int id, Coordinate pos, Coordinate dir){
+void Setup::newPos(uint id, Coordinate pos, Coordinate dir){
     //client current = find(clients, );
     // lookup client by client id number, is same as in clients array
+    qDebug() << "newPos in setup";
+    clients[id]->setPosX(pos.x);
+    clients[id]->setPosY(pos.y);
+//    clients[id]->setDirX(dir.x);
+//    clients[id]->setDirY(dir.y);
 }
 
 void Setup::addClient(client *client){
-    clients[client->getClientId()] = client;
-    view->addClientToScene(client);
+    qDebug() << "add Client in setup";
+    uint tempId = client->getClientId();
+    clients[tempId] = client;    // take id of client and assign it to the corresponding place in array.
+    qDebug() << "add client to scene";
+    view->addClientToScene(clients[client->getClientId()]);             // add the new client to the GUI scene
 }
+
+void Setup::newPlayer(uint id){
+    qDebug() << "newPlayer in setup";
+    client *networkPlayer = new client(Cube, Human);
+    networkPlayer->setClientId(id);
+    qDebug() << "networkplayer id" <<  networkPlayer->getClientId();
+    addClient(networkPlayer);
+}
+
 
 // TODO: design change, implement signal fo on button clicked. this will signal to the main class
 // that the setup is done and can be read, which will start everything sequencially as current impl

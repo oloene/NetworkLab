@@ -82,7 +82,7 @@ void networkModule::leave(){
     try {
         LeaveMsg msg;
         MsgHead head = {sizeof (msg),  localClient->getSeqNum(), localClient->getClientId(), MsgType::Leave};
-
+        msg.head = head;
         int msgSize = sizeof(msg); // check size of the entire message, inorder to be able to send all bytes.
         char *msgChar = reinterpret_cast<char*>(&msg);
         send(msgChar, msgSize);
@@ -101,7 +101,7 @@ void networkModule::eventAction(int direction){
         msg.type = Move;
 
         moveEventMsg.event = msg;
-        moveEventMsg.dir = localClient->getDir();
+//        moveEventMsg.dir = localClient->getDir();
         Coordinate newPos;
         switch (direction) {
             // 0 will be RIGHT
@@ -180,7 +180,7 @@ void networkModule::handleMsg(){
                         qDebug() << "new player";
                         newPlayerMsg = (NewPlayerMsg *)&recvBuffer[posPtr];
                         // signal that makes main create a new client with this client id, name etc.
-                        emit newPlayerSig(newPlayerMsg->msg.head.id, newPlayerMsg->desc, newPlayerMsg->form, newPlayerMsg->name);
+                        emit newPlayerSig(newPlayerMsg->msg.head.id);
                         break;
                     case NewPlayerPosition:
                         qDebug() << "new position";
@@ -202,9 +202,9 @@ void networkModule::handleMsg(){
             case MsgType::Join:
                 qDebug() << "joinType";
                 joinMsg = (JoinMsg *)recvBuffer;
-                localClient->setClientId(joinMsg->head.id);
+                //localClient->setClientId(joinMsg->head.id);
                 qDebug() << "id (2):" << joinMsg->head.id;
-                emit joinSig(localClient);
+                //emit joinSig(localClient);
                 posPtr += joinMsg->head.length;
                 break;
             default:

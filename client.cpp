@@ -3,8 +3,9 @@
 #include <message.h>
 #include <QDebug>
 #include <QKeyEvent>
+#include "networkModule.h"
 
-client::client(QObject *parent, QString name, ObjectForm form, ObjectDesc desc)
+client::client(ObjectForm form, ObjectDesc desc)
 {
     //strcpy(client::name, name.c_str()); // implement length check on input, should not be longer than 32 (or maybe 31) chars.
     client::form = form;
@@ -35,6 +36,7 @@ unsigned int client::getSeqNum(){
 
 void client::setPosX(int newPosX){
     client::pos.x = newPosX;
+    client::setX(newPosX);
 }
 
 int client::getPosX(){
@@ -43,6 +45,8 @@ int client::getPosX(){
 
 void client::setPosY(int newPosY){
     client::pos.y = newPosY;
+    client::setY(newPosY);
+
 }
 
 int client::getPosY(){
@@ -50,25 +54,25 @@ int client::getPosY(){
 }
 
 
-void client::setDirX(int newDirX){
-    client::dir.x = newDirX;
-}
+//void client::setDirX(int newDirX){
+//    client::dir.x = newDirX;
+//}
 
-int client::getDirX(){
-    return client::dir.x;
-}
+//int client::getDirX(){
+//    return client::dir.x;
+//}
 
-void client::setDirY(int newDirY){
-    client::dir.y = newDirY;
-}
+//void client::setDirY(int newDirY){
+//    client::dir.y = newDirY;
+//}
 
-int client::getDirY(){
-    return client::dir.y;
-}
+//int client::getDirY(){
+//    return client::dir.y;
+//}
 
-Coordinate client::getDir(){
-    return client::dir;
-}
+//Coordinate client::getDir(){
+//    return client::dir;
+//}
 
 Coordinate client::getPos(){
     return client::pos;
@@ -80,9 +84,6 @@ unsigned int client::getClientId(){
 
 void client::setClientId(unsigned int id){
     client::id = id;
-}
-
-void client::handleMsg(){
 }
 
 int client::getWidth(){
@@ -106,7 +107,7 @@ void client::keyPressEvent(QKeyEvent *event){
     } else if (event->key() == Qt::Key_Down){
         direction = 3;
     }
-    emit moveSig(direction);
+    //emit moveSig(direction);
     qDebug() << "little keypress maybe";
 }
 

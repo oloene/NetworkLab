@@ -5,6 +5,7 @@
 #include <QGraphicsView>
 #include <client.h>
 
+
 #define SCREEN_HEIGHT 1000
 #define SCREEN_WIDTH 1000
 
@@ -17,6 +18,7 @@ public:
 private:
     QGraphicsScene *scene;
     bool isLocalPlayer = true;
+
 signals:
 
 public slots:

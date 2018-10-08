@@ -16,7 +16,7 @@ class Setup : public QDialog
     Q_OBJECT
 
 public:
-    explicit Setup(QWidget *parent = 0);
+    explicit Setup(QWidget *parent = nullptr);
     ~Setup();
 
 signals:
@@ -24,16 +24,15 @@ signals:
     void setupDone();
 
 private slots:
-    void handleClientPos(int id, Coordinate pos, Coordinate dir);
     void addClient(client *);
     void on_buttonBox_clicked();
-    void newPlayerSlot(int id, char name[]);
-    void newposSlot(int id, Coordinate pos, Coordinate dir);
+    void newPlayer(uint id);
+    void newPos(uint id, Coordinate pos, Coordinate dir);
 
 private:
     View *view;
     Ui::Setup *ui;
-    client *clients[100]; //support for clientid up to a hundred
+    client *clients[40]; //support for clientid up to 40
 };
 
 #endif // SETUP_H

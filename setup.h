@@ -6,6 +6,8 @@
 #include "message.h"
 #include "client.h"
 #include "view.h"
+#include "networkModule.h"
+
 
 namespace Ui {
 class Setup;
@@ -32,7 +34,9 @@ private slots:
 private:
     View *view;
     Ui::Setup *ui;
-    client *clients[40]; //support for clientid up to 40
+    client *clients[40] = {nullptr}; //support for clientid up to 40
+    bool isLocalPlayer = true;
+    networkModule *_network;
 };
 
 #endif // SETUP_H

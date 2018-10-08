@@ -26,7 +26,7 @@ private slots:
 
 public:
     networkModule(QObject *parent = nullptr, QHostAddress ip = QHostAddress::AnyIPv4, int port = 00000);
-    void join();
+    void join(QString name);
     void setLocalClient(client *localClient);
 
 private:

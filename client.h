@@ -4,13 +4,13 @@
 #include <message.h>
 #include <QGraphicsRectItem>
 #include <QKeyEvent>
-//#include <QObject>
+#include <QObject>
 
-class client : public QGraphicsRectItem
+class client : public QObject, public QGraphicsRectItem
 {
-
+Q_OBJECT
 public:
-    explicit client(ObjectForm form = Cube, ObjectDesc desc = Human);
+    explicit client(QObject *parent =nullptr, ObjectForm form = Cube, ObjectDesc desc = Human);
     ObjectForm getForm();
     ObjectDesc getDesc();
     char* getName();
@@ -42,15 +42,18 @@ private:
         0, //init pos x
         0,  //init pos y
     };
+    Coordinate dir = {
+      0,
+      0,
+    };
     const int RECT_WIDTH = 5;
     const int RECT_HEIGHT = 5;
 
-//signals:
-//    void notifyObserver();
-//    void moveSig(int direction);
+signals:
+    void notifyObserver();
+    void moveSig(int direction);
 
-//public slots:
-//    void handleMsg();
+public slots:
 };
 
 #endif // CLIENT_H

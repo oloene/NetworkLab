@@ -5,7 +5,8 @@
 #include <QKeyEvent>
 #include "networkModule.h"
 
-client::client(ObjectForm form, ObjectDesc desc)
+
+client::client(QObject *parent, ObjectForm form, ObjectDesc desc)
 {
     //strcpy(client::name, name.c_str()); // implement length check on input, should not be longer than 32 (or maybe 31) chars.
     client::form = form;
@@ -36,7 +37,7 @@ unsigned int client::getSeqNum(){
 
 void client::setPosX(int newPosX){
     client::pos.x = newPosX;
-    client::setX(newPosX);
+    client::setX((100-newPosX)*5);
 }
 
 int client::getPosX(){
@@ -45,7 +46,7 @@ int client::getPosX(){
 
 void client::setPosY(int newPosY){
     client::pos.y = newPosY;
-    client::setY(newPosY);
+    client::setY((100-newPosY)*5);
 
 }
 
@@ -70,9 +71,9 @@ int client::getPosY(){
 //    return client::dir.y;
 //}
 
-//Coordinate client::getDir(){
-//    return client::dir;
-//}
+Coordinate client::getDir(){
+    return client::dir;
+}
 
 Coordinate client::getPos(){
     return client::pos;
@@ -96,7 +97,7 @@ int client::getHeight(){
 
 void client::keyPressEvent(QKeyEvent *event){
     // according to networkMOdule 0 is right,1 left, 2 up, 3 down
-    QGraphicsItem::keyPressEvent(event);
+    //QGraphicsItem::keyPressEvent(event);
     int direction;
     if (event->key() == Qt::Key_Right){
         direction = 0;
@@ -107,7 +108,7 @@ void client::keyPressEvent(QKeyEvent *event){
     } else if (event->key() == Qt::Key_Down){
         direction = 3;
     }
-    //emit moveSig(direction);
+    emit moveSig(direction);
     qDebug() << "little keypress maybe";
 }
 

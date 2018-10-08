@@ -5,7 +5,6 @@
 #include "view.h"
 #include <QString>
 #include "client.h"
-#include "networkModule.h"
 #include <qhostaddress.h>
 #include "message.h"
 
@@ -29,28 +28,28 @@ void Setup::on_buttonBox_clicked()
     int port = ui->PORT_EDIT->text().toInt();
     QString name = ui->NAME_EDIT->text();
     qDebug() << ip << port << name;
-    client *localClient = new client(Cube, Human);
+    //client *localClient = new client(nullptr, Cube, Human);
 
     QHostAddress serverAddr;
     serverAddr.setAddress(ip);
-    networkModule *_network = new networkModule(nullptr, serverAddr, port);
-    View *view = new View();
+    _network = new networkModule(nullptr, serverAddr, port);
+    _network->join(name);
+
+    view = new View();
     //connect(_network, SIGNAL(joinSig(client *)), this, SLOT(addClient(client *))); // special case for localplayer ?
-    //connect(localClient, SIGNAL(moveSig(int)), _network, SLOT(eventAction(int)));   // keyboard signal generates event to send
     connect(_network, SIGNAL(newPosSig(uint, Coordinate, Coordinate)), this, SLOT(newPos(uint, Coordinate, Coordinate)));
     connect(_network, SIGNAL(newPlayerSig(uint)), this, SLOT(newPlayer(uint)));
 
-    _network->setLocalClient(localClient);
-    _network->join();
+    //_network->setLocalClient(localClient);
+    //_network->join();
 
     this->hide();
     view->show();
 }
 
 void Setup::newPos(uint id, Coordinate pos, Coordinate dir){
-    //client current = find(clients, );
     // lookup client by client id number, is same as in clients array
-    qDebug() << "newPos in setup";
+    qDebug() << "newPos in setup: x: " << pos.x << "y:" << pos.y ;
     clients[id]->setPosX(pos.x);
     clients[id]->setPosY(pos.y);
 //    clients[id]->setDirX(dir.x);
@@ -60,14 +59,22 @@ void Setup::newPos(uint id, Coordinate pos, Coordinate dir){
 void Setup::addClient(client *client){
     qDebug() << "add Client in setup";
     uint tempId = client->getClientId();
-    clients[tempId] = client;    // take id of client and assign it to the corresponding place in array.
-    qDebug() << "add client to scene";
-    view->addClientToScene(clients[client->getClientId()]);             // add the new client to the GUI scene
+    if(clients[tempId] == nullptr){
+        clients[tempId] = client;    // take id of client and assign it to the corresponding place in array.
+        if(isLocalPlayer){
+            _network->setLocalClient(clients[tempId]);
+            connect(clients[tempId], SIGNAL(moveSig(int)), _network, SLOT(eventAction(int)));   // keyboard signal generates event to send
+            isLocalPlayer = false;
+        }
+        qDebug() << "add client to scene";
+        view->addClientToScene(clients[client->getClientId()]);             // add the new client to the GUI scene
+    }
+
 }
 
 void Setup::newPlayer(uint id){
     qDebug() << "newPlayer in setup";
-    client *networkPlayer = new client(Cube, Human);
+    client *networkPlayer = new client(nullptr, Cube, Human);
     networkPlayer->setClientId(id);
     qDebug() << "networkplayer id" <<  networkPlayer->getClientId();
     addClient(networkPlayer);

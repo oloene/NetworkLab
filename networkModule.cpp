@@ -37,7 +37,6 @@ void networkModule::send(char *msg, int msgSize){
     // use for debug socket->write((char *)&msg);
 
     try {
-        localClient->incSeqNum();
         //qDebug() << "msg contents" << msg;
         //qDebug() << "size of msg:" << sizeof (msg);
         socket->write(msg, msgSize);
@@ -57,14 +56,16 @@ void networkModule::close(){
 
 }
 
-void networkModule::join(){
+void networkModule::join(QString name){
     try {
+        QByteArray bNameArr = name.toLatin1();
+        const char *nameCharArr = bNameArr.data();
         JoinMsg msg;
         MsgHead head = {sizeof (msg), 0, 0, MsgType::Join};
         msg.head = head;
-        msg.desc = localClient->getDesc();
-        msg.form = localClient->getForm();
-        strncpy(msg.name, localClient->getName(), sizeof(localClient->getName()) - 1);
+        msg.desc = ObjectDesc::Human;
+        msg.form = ObjectForm::Cube;
+        strncpy(msg.name, nameCharArr, 31);
         //char *msgChar = reinterpret_cast<char*>(&msg);
         int msgSize = sizeof(msg); // check size of the entire message, inorder to be able to send all bytes.
         char *msgBuffer = (char *)&msg;
@@ -80,6 +81,7 @@ void networkModule::join(){
 // Leave msg only contains a head which is correct according to spec.
 void networkModule::leave(){
     try {
+        localClient->incSeqNum();
         LeaveMsg msg;
         MsgHead head = {sizeof (msg),  localClient->getSeqNum(), localClient->getClientId(), MsgType::Leave};
         msg.head = head;
@@ -94,12 +96,13 @@ void networkModule::leave(){
 
 void networkModule::eventAction(int direction){
     try {
+        localClient->incSeqNum();
         MoveEvent moveEventMsg;
         MsgHead head = {sizeof (moveEventMsg),  localClient->getSeqNum(), localClient->getClientId(), MsgType::Event};
         EventMsg msg;
         msg.head = head;
         msg.type = Move;
-
+        qDebug() << "in eventaction";
         moveEventMsg.event = msg;
 //        moveEventMsg.dir = localClient->getDir();
         Coordinate newPos;
@@ -131,9 +134,11 @@ void networkModule::eventAction(int direction){
 
         }
         moveEventMsg.pos = newPos;
-
+        moveEventMsg.dir = localClient->getDir();
+        qDebug() << moveEventMsg.pos.x << "and y is " << moveEventMsg.pos.y;
         int msgSize = sizeof(moveEventMsg); // check size of the entire message, inorder to be able to send all bytes.
-        char *msgChar = reinterpret_cast<char*>(&msg);
+        char *msgChar = reinterpret_cast<char*>(&moveEventMsg);
+        //qDebug() << msgChar;
         send(msgChar, msgSize);
         //throw socket->error();;
     } catch (QTcpSocket::SocketError e) {

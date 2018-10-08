@@ -18,6 +18,7 @@ public:
 private:
     QGraphicsScene *scene;
     bool isLocalPlayer = true;
+    //void initScene();
 
 signals:
 

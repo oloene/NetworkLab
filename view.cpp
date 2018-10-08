@@ -10,7 +10,7 @@ View::View(QGraphicsView *parent) : QGraphicsView(parent)
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->setFixedSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-    scene->setSceneRect(0,0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    scene->setSceneRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     //initScene();
 
 }
@@ -31,8 +31,8 @@ void View::has_changed(){
 void View::addClientToScene(client *client){
     qDebug() << "in add client to scene in veiw";
 
-    //client->setRect((client->getPosX()*5)+100 , (client->getPosY()*5)+100, client->getWidth(), client->getHeight());
-    client->setRect(client->x(), client->y(), client->getWidth(), client->getHeight());
+    client->setRect(client->getPosX() , client->getPosY(), client->getWidth(), client->getHeight());
+    //client->setRect(client->x(), client->y(), client->getWidth(), client->getHeight());
     qDebug() << "setBrush";
     client->setBrush(Qt::red);
 

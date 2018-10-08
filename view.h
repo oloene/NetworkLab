@@ -6,8 +6,8 @@
 #include <client.h>
 
 
-#define SCREEN_HEIGHT 1000
-#define SCREEN_WIDTH 1000
+#define SCREEN_HEIGHT 1008
+#define SCREEN_WIDTH 1008
 
 class View : public QGraphicsView
 {

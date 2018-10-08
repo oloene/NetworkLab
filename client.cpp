@@ -37,6 +37,7 @@ unsigned int client::getSeqNum(){
 
 void client::setPosX(int newPosX){
     client::pos.x = newPosX;
+    //client::setX(newPosX);
     client::setX((100-newPosX)*5);
 }
 
@@ -46,6 +47,7 @@ int client::getPosX(){
 
 void client::setPosY(int newPosY){
     client::pos.y = newPosY;
+    //client::setY(newPosY);
     client::setY((100-newPosY)*5);
 
 }
@@ -100,13 +102,13 @@ void client::keyPressEvent(QKeyEvent *event){
     //QGraphicsItem::keyPressEvent(event);
     int direction;
     if (event->key() == Qt::Key_Right){
-        direction = 0;
-    } else if (event->key() == Qt::Key_Left){
         direction = 1;
+    } else if (event->key() == Qt::Key_Left){
+        direction = 0;
     } else if (event->key() == Qt::Key_Up){
-        direction = 2;
-    } else if (event->key() == Qt::Key_Down){
         direction = 3;
+    } else if (event->key() == Qt::Key_Down){
+        direction = 2;
     }
     emit moveSig(direction);
     qDebug() << "little keypress maybe";

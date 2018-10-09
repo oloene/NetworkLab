@@ -6,8 +6,8 @@
 #include <client.h>
 
 
-#define SCREEN_HEIGHT 1008
-#define SCREEN_WIDTH 1008
+#define SCREEN_HEIGHT 406
+#define SCREEN_WIDTH 406
 
 class View : public QGraphicsView
 {
@@ -25,7 +25,7 @@ signals:
 public slots:
     //view observing the client
     void has_changed();
-    void addClientToScene(client *client);
+    void addClientToScene(client *client, bool isLocalPlayer);
 
 };
 

@@ -38,7 +38,7 @@ unsigned int client::getSeqNum(){
 void client::setPosX(int newPosX){
     client::pos.x = newPosX;
     //client::setX(newPosX);
-    client::setX((100-newPosX)*5);
+    client::setX((100-newPosX)*2);
 }
 
 int client::getPosX(){
@@ -48,7 +48,7 @@ int client::getPosX(){
 void client::setPosY(int newPosY){
     client::pos.y = newPosY;
     //client::setY(newPosY);
-    client::setY((100-newPosY)*5);
+    client::setY((100-newPosY)*2);
 
 }
 

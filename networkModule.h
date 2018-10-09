@@ -14,7 +14,7 @@ class networkModule : public QObject
 Q_OBJECT
 
 signals:
-    void joinSig(client *client);
+    void joinSig(uint id);
     void newPosSig(uint id, Coordinate pos, Coordinate dir);
     void newPlayerSig(uint id);
     void playerLeaveSig(uint id);

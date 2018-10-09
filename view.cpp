@@ -28,7 +28,7 @@ void View::has_changed(){
    qDebug() << "repainting the window... \n";
 }
 
-void View::addClientToScene(client *client){
+void View::addClientToScene(client *client, bool isLocalPlayer){
     qDebug() << "in add client to scene in veiw";
 
     client->setRect(client->getPosX() , client->getPosY(), client->getWidth(), client->getHeight());
@@ -36,11 +36,10 @@ void View::addClientToScene(client *client){
     qDebug() << "setBrush";
     client->setBrush(Qt::red);
 
-    if(this->isLocalPlayer){
+    if(isLocalPlayer){
         qDebug() << "is local palyer";
         client->setFlag(QGraphicsItem::ItemIsFocusable);
         client->setFocus();
-        this->isLocalPlayer = false;
     }
 //    client->setRect(client->getPosX() +100 , client->getPosY()+100, client->getWidth(), client->getHeight());
 

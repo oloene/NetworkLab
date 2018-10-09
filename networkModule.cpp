@@ -208,8 +208,9 @@ void networkModule::handleMsg(){
                 qDebug() << "joinType";
                 joinMsg = (JoinMsg *)recvBuffer;
                 //localClient->setClientId(joinMsg->head.id);
+
                 qDebug() << "id (2):" << joinMsg->head.id;
-                //emit joinSig(localClient);
+                emit joinSig(joinMsg->head.id);
                 posPtr += joinMsg->head.length;
                 break;
             default:

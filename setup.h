@@ -30,6 +30,7 @@ private slots:
     void on_buttonBox_clicked();
     void newPlayer(uint id);
     void newPos(uint id, Coordinate pos, Coordinate dir);
+    void setLocalClientId(uint id);
 
 private:
     View *view;
@@ -37,6 +38,7 @@ private:
     client *clients[40] = {nullptr}; //support for clientid up to 40
     bool isLocalPlayer = true;
     networkModule *_network;
+    uint localPlayerId;
 };
 
 #endif // SETUP_H

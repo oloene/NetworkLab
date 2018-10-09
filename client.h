@@ -46,8 +46,8 @@ private:
       0,
       0,
     };
-    const int RECT_WIDTH = 5;
-    const int RECT_HEIGHT = 5;
+    const int RECT_WIDTH = 2;
+    const int RECT_HEIGHT = 2;
 
 signals:
     void notifyObserver();

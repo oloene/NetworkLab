@@ -36,7 +36,7 @@ void Setup::on_buttonBox_clicked()
     _network->join(name);
 
     view = new View();
-    //connect(_network, SIGNAL(joinSig(client *)), this, SLOT(addClient(client *))); // special case for localplayer ?
+    connect(_network, SIGNAL(joinSig(uint)), this, SLOT(setLocalClientId(uint))); // special case for localplayer ?
     connect(_network, SIGNAL(newPosSig(uint, Coordinate, Coordinate)), this, SLOT(newPos(uint, Coordinate, Coordinate)));
     connect(_network, SIGNAL(newPlayerSig(uint)), this, SLOT(newPlayer(uint)));
 
@@ -45,6 +45,10 @@ void Setup::on_buttonBox_clicked()
 
     this->hide();
     view->show();
+}
+
+void Setup::setLocalClientId(uint id){
+    localPlayerId = id;
 }
 
 void Setup::newPos(uint id, Coordinate pos, Coordinate dir){
@@ -59,15 +63,17 @@ void Setup::newPos(uint id, Coordinate pos, Coordinate dir){
 void Setup::addClient(client *client){
     qDebug() << "add Client in setup";
     uint tempId = client->getClientId();
-    if(clients[tempId] == nullptr){
+    if(clients[tempId] == nullptr){ // checks so that we dont double assign a player due to the servers nature of sending double messages
         clients[tempId] = client;    // take id of client and assign it to the corresponding place in array.
-        if(isLocalPlayer){
+        if(isLocalPlayer && (tempId == localPlayerId)){
             _network->setLocalClient(clients[tempId]);
             connect(clients[tempId], SIGNAL(moveSig(int)), _network, SLOT(eventAction(int)));   // keyboard signal generates event to send
+            view->addClientToScene(clients[client->getClientId()], isLocalPlayer);
             isLocalPlayer = false;
+        }else{
+            view->addClientToScene(clients[client->getClientId()], false);             // add the new client to the GUI scene
         }
         qDebug() << "add client to scene";
-        view->addClientToScene(clients[client->getClientId()]);             // add the new client to the GUI scene
     }
 
 }
